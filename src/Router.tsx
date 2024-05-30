@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home/Home';
 import Calendar from './pages/Agenda/Agenda';
 import Header from './components/header/Header';

@@ -11,12 +11,20 @@ const Agenda = () => {
   const [mode, setMode] = useState<CalendarMode>(CalendarMode.MONTH);
   const { t } = useTranslation();
 
-  const [date, setDate] = useState(new Date());
-
-  const events: EventData[] = [
+  const activities: EventData[] = [
     {
       title: 'Implemented fresh-thinking artificial intelligence',
       date: '2024-05-30T01:51:13.000Z',
+      time: '01:51',
+      description: 'Production action gun large.',
+      patient: {
+        name: 'Jaime',
+        lastname: 'Bridges',
+      },
+    },
+    {
+      title: 'Implemented fresh-thinking artificial intelligence',
+      date: '2024-05-29T01:51:13.000Z',
       time: '01:51',
       description: 'Production action gun large.',
       patient: {
@@ -37,6 +45,16 @@ const Agenda = () => {
     {
       title: 'Visionary uniform secured line',
       date: '2024-05-30T20:26:29.000Z',
+      time: '20:26',
+      description: 'Than first mouth arm effect actually.',
+      patient: {
+        name: 'Daniel',
+        lastname: 'Vance',
+      },
+    },
+    {
+      title: 'Visionary uniform secured line',
+      date: '2024-05-31T20:26:29.000Z',
       time: '20:26',
       description: 'Than first mouth arm effect actually.',
       patient: {
@@ -85,6 +103,16 @@ const Agenda = () => {
       },
     },
     {
+      title: 'Optimized cohesive structure',
+      date: '2024-06-02T16:16:23.000Z',
+      time: '16:16',
+      description: 'Receive either discuss our.',
+      patient: {
+        name: 'Jill',
+        lastname: 'Thompson',
+      },
+    },
+    {
       title: 'Centralized methodical matrices',
       date: '2024-05-30T17:38:09.000Z',
       time: '17:38',
@@ -116,18 +144,14 @@ const Agenda = () => {
     },
   ];
 
-  const handleDateChange = (newDate: Date) => {
-    setDate(newDate);
-  };
-
   const chooseCalendarType = (type: string) => {
     switch (type) {
       case CalendarMode.MONTH:
-        return <MonthCalendar events={[]} />;
+        return <MonthCalendar activities={activities} />;
       case CalendarMode.WEEK:
-        return <WeekCalendar events={[]} />;
+        return <WeekCalendar activities={activities} />;
       case CalendarMode.DAY:
-        return <DayCalendar events={events} />;
+        return <DayCalendar activities={activities} />;
     }
   };
 

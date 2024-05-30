@@ -4,35 +4,13 @@ import { Button } from 'primereact/button';
 import EventDialog from '../../EventDialog/EventDialog';
 import { EventData } from '../../../models/Event';
 import { daysOfWeek } from '../../../common/utils';
-import CalendarEvent from '../../event/CalendarEvent';
 import { CalendarProps } from '../../../models/Calendar';
+import CalendarEvent from '../../event/CalendarEvent';
 
-const generateRandomEvents = (
-  year: number,
-  month: number,
-  count: number
-): EventData[] => {
-  const events: EventData[] = [];
-  for (let i = 0; i < count; i++) {
-    const day =
-      Math.floor(Math.random() * new Date(year, month + 1, 0).getDate()) + 1;
-    events.push({
-      date: new Date(year, month, day),
-      title: `Event ${i + 1}`,
-      description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    });
-  }
-  return events;
-};
-
-const MonthCalendar: React.FC<CalendarProps> = () => {
+const MonthCalendar: React.FC<CalendarProps> = ({ activities }: any) => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [events, setEvents] = useState<EventData[]>(
-    generateRandomEvents(currentDate.getFullYear(), currentDate.getMonth(), 5)
-  );
   const [visible, setVisible] = useState(false);
-  const [eventData, setEventData] = useState<EventData>({});
+  const [eventData, setEventData] = useState<EventData>();
 
   const startOfMonth = new Date(
     currentDate.getFullYear(),
@@ -58,9 +36,6 @@ const MonthCalendar: React.FC<CalendarProps> = () => {
       1
     );
     setCurrentDate(newDate);
-    setEvents(
-      generateRandomEvents(newDate.getFullYear(), newDate.getMonth(), 5)
-    );
   };
 
   const handleNextMonth = () => {
@@ -70,20 +45,35 @@ const MonthCalendar: React.FC<CalendarProps> = () => {
       1
     );
     setCurrentDate(newDate);
-    setEvents(
-      generateRandomEvents(newDate.getFullYear(), newDate.getMonth(), 5)
-    );
   };
 
-  const handleEvent = (event: EventData) => {
-    setEventData(event);
+  const handleEvent = (activity: EventData) => {
+    setEventData(activity);
     setVisible(true);
   };
 
   const getEventsForDate = (date: Date) => {
-    return events.filter(
-      (event) => event.date.toDateString() === date.toDateString()
-    );
+    const dateEvents = activities.filter((activity: EventData) => {
+      const eventDate = new Date(activity.date);
+
+      const eventDateNoTime = Date.UTC(
+        eventDate.getUTCFullYear(),
+        eventDate.getUTCMonth(),
+        eventDate.getUTCDate()
+      );
+
+      const currentDateNoTime = Date.UTC(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate()
+      );
+
+      return eventDateNoTime === currentDateNoTime;
+    });
+
+    return dateEvents.map((activity: EventData, index: number) => (
+      <CalendarEvent activity={activity} handleEvent={handleEvent} />
+    ));
   };
 
   return (
@@ -114,9 +104,7 @@ const MonthCalendar: React.FC<CalendarProps> = () => {
               <div key={date.getDate()} className='day'>
                 <span>{date.getDate()}</span>
                 <div className='events'>
-                  {getEventsForDate(date).map((event, index) => (
-                    <CalendarEvent event={event} handleEvent={handleEvent} />
-                  ))}
+                  {getEventsForDate(date)}
                 </div>
               </div>
             ))}

@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { EventData } from '../../../models/Event';
 import { Button } from 'primereact/button';
+import CalendarEvent from '../../event/CalendarEvent';
+import EventDialog from '../../EventDialog/EventDialog';
+import { CalendarProps } from '../../../models/Calendar';
 
-interface CalendarProps {
-  events: EventData[];
-}
 
-const DayCalendar: React.FC<CalendarProps> = ({ events }: any) => {
+const DayCalendar: React.FC<CalendarProps> = ({ activities }: any) => {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [visible, setVisible] = useState(false);
+  const [eventData, setEventData] = useState<EventData>();
 
   const nextDay = () => {
     const nextDate = new Date(currentDate);
@@ -23,46 +25,53 @@ const DayCalendar: React.FC<CalendarProps> = ({ events }: any) => {
 
   const hours = Array.from({ length: 24 }, (_, i) => i);
 
-  const generateRandomEvents = () => {
-    const randomEvents: EventData[] = [];
-    const hoursOfDay = Array.from({ length: 24 }, (_, i) => `${i}:00`);
-    hoursOfDay.forEach((time) => {
-      const randomIndex = Math.floor(Math.random() * events.length);
-      randomEvents.push({
-        time,
-        description: events[randomIndex]?.description,
-      });
-    });
-    return randomEvents;
+  const handleEvent = (event: EventData) => {
+    setEventData(event);
+    setVisible(true);
   };
 
-  const dailyEvents = generateRandomEvents();
-
   const renderEventsForHour = (hour: number) => {
-    const hourEvents = dailyEvents.filter(
-      (event) => event.time === `${hour}:00`
-    );
-    return hourEvents.map((event, index) => (
-      <div key={index} className='event'>
-        {event?.description}
-      </div>
+    const hourEvents = activities.filter((activity: EventData) => {
+      const eventDate = new Date(activity.date);
+
+      const eventDateNoTime = Date.UTC(
+        eventDate.getUTCFullYear(),
+        eventDate.getUTCMonth(),
+        eventDate.getUTCDate()
+      );
+      const currentDateNoTime = Date.UTC(
+        currentDate.getUTCFullYear(),
+        currentDate.getUTCMonth(),
+        currentDate.getUTCDate()
+      );
+
+      return (
+        currentDateNoTime === eventDateNoTime &&
+        eventDate.getUTCHours() === hour
+      );
+    });
+    return hourEvents.map((event: EventData, index: any) => (
+      <CalendarEvent activity={event} key={index} handleEvent={handleEvent} />
     ));
   };
 
   return (
-    <div className='calendar'>
-      <div className='header'>
-        <Button onClick={previousDay}>Previous</Button>
-        <h2>{currentDate.toDateString()}</h2>
-        <Button onClick={nextDay}>Next</Button>
-      </div>
-      {hours.map((hour) => (
-        <div key={hour} className='hour'>
-          <div className='time'>{`${hour}:00`}</div>
-          <div className='events'>{renderEventsForHour(hour)}</div>
+    <>
+      <EventDialog data={eventData} visible={visible} setVisible={setVisible} />
+      <div className='calendar'>
+        <div className='header'>
+          <Button onClick={previousDay}>Previous</Button>
+          <h2>{currentDate.toDateString()}</h2>
+          <Button onClick={nextDay}>Next</Button>
         </div>
-      ))}
-    </div>
+        {hours.map((hour) => (
+          <div key={hour} className='hour'>
+            <div className='time'>{`${hour}:00`}</div>
+            <div className='events'>{renderEventsForHour(hour)}</div>
+          </div>
+        ))}
+      </div>
+    </>
   );
 };
 

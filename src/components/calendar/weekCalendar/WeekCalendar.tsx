@@ -7,14 +7,15 @@ import EventDialog from '../../EventDialog/EventDialog';
 import { CalendarProps } from '../../../models/Calendar';
 
 interface Day {
-  date: string;
-  events?: EventData[];
+  dateString: string;
+  date: Date;
+  activities?: EventData[];
 }
 
-const WeekCalendar: React.FC<CalendarProps> = ({ events })  => {
+const WeekCalendar: React.FC<CalendarProps> = ({ activities }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [visible, setVisible] = useState(false);
-  const [eventData, setEventData] = useState<EventData>({});
+  const [eventData, setEventData] = useState<EventData>();
 
   const getWeekDays = (date: Date): Day[] => {
     const currentDayIndex = date.getDay();
@@ -22,40 +23,13 @@ const WeekCalendar: React.FC<CalendarProps> = ({ events })  => {
 
     for (let i = 0; i < 7; i++) {
       const dateNum = date.getDate() - currentDayIndex + i;
+      const newDate = new Date(date.getFullYear(), date.getMonth(), dateNum);
 
-      const events: EventData[] = generateRandomEvents(
-        date.getFullYear(),
-        date.getMonth(),
-        dateNum
-      );
-
-      const finalDate = generateDate(date);
-      currentWeek.push({ date: finalDate, events });
+      const dateString = generateDate(newDate);
+      currentWeek.push({ dateString: dateString, date: newDate });
     }
 
     return currentWeek;
-  };
-
-  const generateRandomEvents = (
-    year: number,
-    month: number,
-    date: number
-  ): EventData[] => {
-    const numEvents = Math.floor(Math.random() * 3);
-    const events: EventData[] = [];
-    for (let i = 0; i < numEvents; i++) {
-      const eventDate = new Date(year, month, date, 10 + i, 0);
-      events.push({
-        title: `Event ${i + 1}`,
-        date: eventDate,
-        description: `Description for event ${i + 1}`,
-        patient: {
-          name: `Patient ${i + 1}`,
-          lastname: `Lastname ${i + 1}`,
-        },
-      });
-    }
-    return events;
   };
 
   const handleNextWeek = () => {
@@ -77,6 +51,29 @@ const WeekCalendar: React.FC<CalendarProps> = ({ events })  => {
     setVisible(true);
   };
 
+  const renderEventsForWeek = (date: any) => {
+    const hourEvents = activities.filter((activity: EventData) => {
+      const eventDate = new Date(activity.date);
+
+      const eventDateNoTime = Date.UTC(
+        eventDate.getUTCFullYear(),
+        eventDate.getUTCMonth(),
+        eventDate.getUTCDate()
+      );
+      const currentDateNoTime = Date.UTC(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate()
+      );
+
+      return currentDateNoTime === eventDateNoTime;
+    });
+
+    return hourEvents.map((event: EventData, index: any) => (
+      <CalendarEvent activity={event} key={index} handleEvent={handleEvent} />
+    ));
+  };
+
   return (
     <>
       <EventDialog data={eventData} visible={visible} setVisible={setVisible} />
@@ -92,11 +89,8 @@ const WeekCalendar: React.FC<CalendarProps> = ({ events })  => {
         <div className='week'>
           {weekDays.map((day, index) => (
             <div key={index} className='day'>
-              <div>{day.date}</div>
-              {day.events &&
-                day.events.map((event, eventIndex) => (
-                  <CalendarEvent event={event} handleEvent={handleEvent} />
-                ))}
+              <div>{day.dateString}</div>
+              {renderEventsForWeek(day.date)}
             </div>
           ))}
         </div>

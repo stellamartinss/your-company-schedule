@@ -1,3 +1,5 @@
+import { EventData } from './Event';
+
 export enum CalendarMode {
   MONTH = 'MONTH',
   DAY = 'DAY',
@@ -5,5 +7,5 @@ export enum CalendarMode {
 }
 
 export interface CalendarProps {
-  events: Event[];
+  activities: EventData[];
 }

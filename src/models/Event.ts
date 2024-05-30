@@ -1,6 +1,6 @@
 export interface EventData {
   title?: string;
-  date?: string;
+  date: string;
   time?: string;
   description?: string;
   patient?: {

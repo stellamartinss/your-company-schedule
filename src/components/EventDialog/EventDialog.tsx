@@ -12,11 +12,11 @@ const EventDialog = ({
   visible: boolean;
   setVisible: Function;
 }) => {
-  const formattedDate = generateDate(data?.date);
+  const formattedDate = generateDate(new Date(data?.date));
 
   return (
     <Dialog
-      header={data.title}
+      header={data?.title}
       visible={visible}
       style={{ width: '50vw' }}
       onHide={() => {
@@ -27,7 +27,7 @@ const EventDialog = ({
       <p>
         <strong>{formattedDate}</strong>
       </p>
-      <p className='m-0'>{data.description?.toString()}</p>
+      <p className='m-0'>{data?.description?.toString()}</p>
     </Dialog>
   );
 };

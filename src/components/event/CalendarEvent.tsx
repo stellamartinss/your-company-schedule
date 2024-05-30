@@ -3,15 +3,15 @@ import { EventData } from '../../models/Event';
 import "./CalendarEvent.css"
 
 const CalendarEvent = ({
-  event,
+  activity,
   handleEvent,
 }: {
-  event: EventData;
+  activity: EventData;
   handleEvent: Function;
 }) => {
   return (
-    <div className='event' onClick={() => handleEvent(event)}>
-      {event.title}
+    <div className='event' onClick={() => handleEvent(activity)}>
+      {activity?.title}
     </div>
   );
 };
