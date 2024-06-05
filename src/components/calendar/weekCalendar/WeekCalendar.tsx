@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Button } from 'primereact/button';
 import { EventData } from '../../../models/Event';
 import { generateDate } from '../../../common/utils';
 import CalendarEvent from '../../event/CalendarEvent';
 import EventDialog from '../../EventDialog/EventDialog';
-import { CalendarProps } from '../../../models/Calendar';
+import { CalendarMode, CalendarProps } from '../../../models/Calendar';
+import CalendarHeader from '../calendarHeader/CalendarHeader';
 
 interface Day {
   dateString: string;
@@ -78,14 +78,12 @@ const WeekCalendar: React.FC<CalendarProps> = ({ activities }) => {
     <>
       <EventDialog data={eventData} visible={visible} setVisible={setVisible} />
       <div className='calendar'>
-        <div className='header'>
-          <Button onClick={handlePreviousWeek}>Previous</Button>
-          <h2>
-            {currentDate.toLocaleString('default', { month: 'long' })}{' '}
-            {currentDate.getFullYear()}
-          </h2>
-          <Button onClick={handleNextWeek}>Next</Button>
-        </div>
+        <CalendarHeader
+          currentDate={currentDate}
+          handlePrev={handlePreviousWeek}
+          handleNext={handleNextWeek}
+          mode={CalendarMode.WEEK}
+        />
         <div className='week'>
           {weekDays.map((day, index) => (
             <div key={index} className='day'>

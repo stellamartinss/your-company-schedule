@@ -1,18 +1,6 @@
-import React, { useState } from 'react';
-import MonthCalendar from '../../components/calendar/monthCalendar/MonthCalendar';
-import WeekCalendar from '../../components/calendar/weekCalendar/WeekCalendar';
-import { Button } from 'primereact/button';
-import { CalendarMode } from '../../models/Calendar';
-import { useTranslation } from 'react-i18next';
-import DayCalendar from '../../components/calendar/dayCalendar/DayCalendar';
-import { EventData } from '../../models/Event';
-import { ButtonGroup } from 'primereact/buttongroup';
+import { EventData } from '../models/Event';
 
-const Agenda = () => {
-  const [mode, setMode] = useState<CalendarMode>(CalendarMode.MONTH);
-  const { t } = useTranslation();
-
-  const activities: EventData[] = [
+export const mockActivities: EventData[] = [
     {
       title: 'Implemented fresh-thinking artificial intelligence',
       date: '2024-05-30T01:51:13.000Z',
@@ -65,7 +53,7 @@ const Agenda = () => {
     },
     {
       title: 'Persistent attitude-oriented middleware',
-      date: '2024-05-30T01:49:04.000Z',
+      date: '2024-06-05T01:49:04.000Z',
       time: '01:49',
       description: 'Product power specific take behind choose.',
       patient: {
@@ -144,48 +132,3 @@ const Agenda = () => {
       },
     },
   ];
-
-  const chooseCalendarType = (type: string) => {
-    switch (type) {
-      case CalendarMode.MONTH:
-        return <MonthCalendar activities={activities} />;
-      case CalendarMode.WEEK:
-        return <WeekCalendar activities={activities} />;
-      case CalendarMode.DAY:
-        return <DayCalendar activities={activities} />;
-    }
-  };
-
-  const handleSetMode = (selectedMode: CalendarMode) => {
-    setMode(selectedMode);
-  };
-
-  return (
-    <div>
-      <div className='text-center mt-3'>
-        <ButtonGroup>
-          <Button
-            label={`${t(`language.DAY`)}`}
-            aria-selected={true}
-            onClick={() => handleSetMode(CalendarMode.DAY)}
-            outlined={mode === CalendarMode.DAY}
-          />
-          <Button
-            label={`${t(`language.WEEK`)}`}
-            onClick={() => handleSetMode(CalendarMode.WEEK)}
-            outlined={mode === CalendarMode.WEEK}
-          />
-          <Button
-            label={`${t(`language.MONTH`)}`}
-            onClick={() => handleSetMode(CalendarMode.MONTH)}
-            outlined={mode === CalendarMode.MONTH}
-          />
-        </ButtonGroup>
-      </div>
-
-      {chooseCalendarType(mode)}
-    </div>
-  );
-};
-
-export default Agenda;

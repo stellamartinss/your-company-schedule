@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { EventData } from '../../../models/Event';
-import { Button } from 'primereact/button';
 import CalendarEvent from '../../event/CalendarEvent';
 import EventDialog from '../../EventDialog/EventDialog';
-import { CalendarProps } from '../../../models/Calendar';
-
+import { CalendarMode, CalendarProps } from '../../../models/Calendar';
+import CalendarHeader from '../calendarHeader/CalendarHeader';
 
 const DayCalendar: React.FC<CalendarProps> = ({ activities }: any) => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -59,11 +58,12 @@ const DayCalendar: React.FC<CalendarProps> = ({ activities }: any) => {
     <>
       <EventDialog data={eventData} visible={visible} setVisible={setVisible} />
       <div className='calendar'>
-        <div className='header'>
-          <Button onClick={previousDay}>Previous</Button>
-          <h2>{currentDate.toDateString()}</h2>
-          <Button onClick={nextDay}>Next</Button>
-        </div>
+        <CalendarHeader
+          currentDate={currentDate}
+          handlePrev={previousDay}
+          handleNext={nextDay}
+          mode={CalendarMode.DAY}
+        />
         {hours.map((hour) => (
           <div key={hour} className='hour'>
             <div className='time'>{`${hour}:00`}</div>

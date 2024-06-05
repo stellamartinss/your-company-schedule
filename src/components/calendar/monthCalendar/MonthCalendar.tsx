@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import '../Calendar.css';
-import { Button } from 'primereact/button';
 import EventDialog from '../../EventDialog/EventDialog';
 import { EventData } from '../../../models/Event';
 import { daysOfWeek } from '../../../common/utils';
-import { CalendarProps } from '../../../models/Calendar';
+import { CalendarMode, CalendarProps } from '../../../models/Calendar';
 import CalendarEvent from '../../event/CalendarEvent';
+import CalendarHeader from '../calendarHeader/CalendarHeader';
 
 const MonthCalendar: React.FC<CalendarProps> = ({ activities }: any) => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -80,14 +80,12 @@ const MonthCalendar: React.FC<CalendarProps> = ({ activities }: any) => {
     <>
       <EventDialog data={eventData} visible={visible} setVisible={setVisible} />
       <div className='calendar'>
-        <div className='header'>
-          <Button onClick={handlePrevMonth}>Previous</Button>
-          <h2>
-            {currentDate.toLocaleString('default', { month: 'long' })}{' '}
-            {currentDate.getFullYear()}
-          </h2>
-          <Button onClick={handleNextMonth}>Next</Button>
-        </div>
+        <CalendarHeader
+          currentDate={currentDate}
+          handlePrev={handlePrevMonth}
+          handleNext={handleNextMonth}
+          mode={CalendarMode.MONTH}
+        />
         <div className='body'>
           <div className='days-of-week'>
             {daysOfWeek['pt'].map((day) => (
@@ -103,9 +101,7 @@ const MonthCalendar: React.FC<CalendarProps> = ({ activities }: any) => {
             {daysInMonth.map((date) => (
               <div key={date.getDate()} className='day'>
                 <span>{date.getDate()}</span>
-                <div className='events'>
-                  {getEventsForDate(date)}
-                </div>
+                <div className='events'>{getEventsForDate(date)}</div>
               </div>
             ))}
           </div>
