@@ -15,7 +15,7 @@ const Agenda = () => {
   const activities: EventData[] = [
     {
       title: 'Implemented fresh-thinking artificial intelligence',
-      date: '2024-05-30T01:51:13.000Z',
+      date: '2024-06-05T01:51:13.000Z',
       time: '01:51',
       description: 'Production action gun large.',
       patient: {
