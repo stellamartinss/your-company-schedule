@@ -6,11 +6,10 @@ export interface TopicNode {
 export interface EditalProps {
   edital: string;
   setEdital: Function;
-  setVectoredEdital: Function;
+  setConcursoData: Function;
 }
 
 export interface VectoredEditalProps {
-    vectoredEdital: TopicNode[];
-    setVectoredEdital: Function;
-  }
-  
+  concursoContent: TopicNode[];
+  setConcursoData: Function;
+}

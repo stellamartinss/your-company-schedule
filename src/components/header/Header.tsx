@@ -14,8 +14,9 @@ const Header: React.FC = () => {
       url: '/calendar'
     },
     {
-      label: 'New Appointment',
+      label: 'Novo Concurso',
       icon: 'pi pi-plus',
+      url: '/create'
     }
   ];
 

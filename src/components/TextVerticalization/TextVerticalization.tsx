@@ -6,7 +6,7 @@ import { EditalProps, TopicNode } from '../../models/Edital';
 const TextVerticalization = ({
   edital,
   setEdital,
-  setVectoredEdital,
+  setConcursoData,
 }: EditalProps) => {
   const handleEditalBreaking = () => {
     const lines = edital
@@ -16,7 +16,7 @@ const TextVerticalization = ({
     const stack: TopicNode[] = [];
     let currentLevel = 0;
 
-    const final = [];
+    const final: any = [];
 
     for (const line of lines) {
       const trimmedLine = line.trim();
@@ -52,20 +52,26 @@ const TextVerticalization = ({
       currentLevel = level;
     }
 
-    setVectoredEdital(final);
-    console.log(final.filter((item) => item.title !== ''));
+    setConcursoData((prev: any) => ({ ...prev, content: final }));
   };
 
   return (
-    <div>
-      <div className='flex flex-wrap justify-content-between mb-3'>
-        <h3>Insira abaixo o conteúdo do edital verticalizado</h3>
-        <Button
-          onClick={() => handleEditalBreaking()}
-          size='small'
-        >
-          Dinamizar Edital
-        </Button>
+    <div className=' m-2'>
+      <div>
+        <div className='flex flex-wrap gap-3 p-fluid'>
+          <div>
+            <h3>Insira abaixo o conteúdo do edital verticalizado</h3>
+          </div>
+          <div className='ml-auto mr-2'>
+            <Button
+              onClick={() => handleEditalBreaking()}
+              size='small'
+              icon='pi pi-play '
+              label='Executar'
+              className='mt-3'
+            />
+          </div>
+        </div>
       </div>
       <InputTextarea
         value={edital}
