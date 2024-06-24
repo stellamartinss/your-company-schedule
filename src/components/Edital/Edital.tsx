@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Accordion, AccordionTab } from 'primereact/accordion';
-import { VectoredEditalProps } from '../../models/Edital';
+import { TopicNode, VectoredEditalProps } from '../../models/Edital';
 import { Panel } from 'primereact/panel';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import './edital.css';
+import { Concurso } from '../../models/Concurso';
 
-const Edital = ({ concursoContent }: VectoredEditalProps) => {
+const Edital = ({ concursoContent, setConcursoData }: VectoredEditalProps) => {
   const [value, setValue] = useState<string>();
   const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
@@ -26,8 +27,9 @@ const Edital = ({ concursoContent }: VectoredEditalProps) => {
           </div>
           <Accordion activeIndex={0}>
             {concursoContent &&
-              concursoContent.map((item) => (
+              concursoContent.map((item, index) => (
                 <AccordionTab
+                  key={index}
                   header={
                     <>
                       {isEditMode ? (
@@ -41,8 +43,9 @@ const Edital = ({ concursoContent }: VectoredEditalProps) => {
                     </>
                   }
                 >
-                  {item.subtopics.map((subtopic) => (
+                  {item.subtopics.map((subtopic, sindex) => (
                     <Panel
+                      key={sindex}
                       header={
                         <div>
                           {isEditMode ? (
@@ -57,30 +60,43 @@ const Edital = ({ concursoContent }: VectoredEditalProps) => {
                       }
                       toggleable
                     >
-                      {subtopic.subtopics.map((sub) => (
-                        <div className='flex flex-nowrap gap-3 mb-3'>
-                          <div className='w-full'>
-                            {isEditMode ? (
-                              <InputText
-                                value={sub.title}
-                                className='w-full'
-                              ></InputText>
-                            ) : (
-                              <span className=''>- {sub.title}</span>
-                            )}
-                          </div>
-                          <div>
-                            <div className='p-inputgroup flex-1'>
-                              <InputText placeholder='Link caderno de provas' />
-                              <Button
-                                icon='pi pi-link'
-                                className='p-button-secondary'
-                                onChange={(e) => setValue(e.target.value)}
-                              />
+                      {subtopic.subtopics.map(
+                        (sub: TopicNode, subindex: number) => (
+                          <div
+                            className='flex flex-nowrap gap-3 mb-3'
+                            key={subindex}
+                          >
+                            <div className='w-full'>
+                              {isEditMode ? (
+                                <InputText
+                                  value={sub.title}
+                                  className='w-full'
+                                ></InputText>
+                              ) : (
+                                <span className=''>- {sub.title}</span>
+                              )}
+                            </div>
+                            <div>
+                              <div className='p-inputgroup flex-1'>
+                                <InputText
+                                  value={sub.url}
+                                  placeholder='Link caderno de provas'
+                                  onChange={(e) => {
+                                    concursoContent[index].subtopics[
+                                      sindex
+                                    ].subtopics[subindex].url = e.target.value;
+
+                                    setConcursoData((prev: Concurso) => ({
+                                      ...prev,
+                                      content: concursoContent,
+                                    }));
+                                  }}
+                                />
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        )
+                      )}
                     </Panel>
                   ))}
                 </AccordionTab>

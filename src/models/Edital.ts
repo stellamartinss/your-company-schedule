@@ -1,6 +1,7 @@
 export interface TopicNode {
   title: string;
   subtopics: TopicNode[];
+  url?: string;
 }
 
 export interface EditalProps {
@@ -11,4 +12,5 @@ export interface EditalProps {
 
 export interface VectoredEditalProps {
   concursoContent?: TopicNode[];
+  setConcursoData: Function;
 }

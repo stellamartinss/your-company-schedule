@@ -13,9 +13,9 @@ const CreatePublicTender = () => {
 
   const [edital, setEdital] = useState<string>('');
 
-  useEffect(() => {
-    console.log(concursoData);
-  }, [concursoData]);
+  const handleSaveConcurso = () => {
+    console.log(concursoData)
+  }
 
   return (
     <div className='m-3'>
@@ -24,7 +24,7 @@ const CreatePublicTender = () => {
           <h1>Crie um novo concurso público</h1>
         </div>
         <div className='ml-auto'>
-          <Button label='Salvar'></Button>
+          <Button label='Salvar' onClick={() => handleSaveConcurso()}></Button>
         </div>
       </div>
 
@@ -78,6 +78,7 @@ const CreatePublicTender = () => {
             <div style={{ width: '100%' }}>
               <Edital
                 concursoContent={concursoData?.content}
+                setConcursoData={setConcursoData}
               />
             </div>
           </SplitterPanel>
