@@ -10,6 +10,5 @@ export interface EditalProps {
 }
 
 export interface VectoredEditalProps {
-  concursoContent: TopicNode[];
-  setConcursoData: Function;
+  concursoContent?: TopicNode[];
 }

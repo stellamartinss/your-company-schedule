@@ -7,20 +7,9 @@ import { Concurso } from '../../models/Concurso';
 import { Calendar } from 'primereact/calendar';
 import { Button } from 'primereact/button';
 
-const initialConcurso: Concurso = {
-  name: '',
-  board: '',
-  date: null,
-  content: [
-    {
-      title: '',
-      subtopics: [],
-    },
-  ],
-};
 
 const CreatePublicTender = () => {
-  const [concursoData, setConcursoData] = useState<Concurso>(initialConcurso);
+  const [concursoData, setConcursoData] = useState<Concurso>();
 
   const [edital, setEdital] = useState<string>('');
 
@@ -77,17 +66,20 @@ const CreatePublicTender = () => {
       <div className='mt-3'>
         <Splitter style={{ height: 'fit-content' }}>
           <SplitterPanel className=''>
-            <TextVerticalization
-              edital={edital}
-              setEdital={setEdital}
-              setConcursoData={setConcursoData}
-            />
+            <div style={{ width: '100%' }}>
+              <TextVerticalization
+                edital={edital}
+                setEdital={setEdital}
+                setConcursoData={setConcursoData}
+              />
+            </div>
           </SplitterPanel>
           <SplitterPanel className=''>
-            <Edital
-              concursoContent={concursoData.content}
-              setConcursoData={setConcursoData}
-            />
+            <div style={{ width: '100%' }}>
+              <Edital
+                concursoContent={concursoData?.content}
+              />
+            </div>
           </SplitterPanel>
         </Splitter>
       </div>
